@@ -1,0 +1,21 @@
+.new-training {
+  padding: 30px;
+}
+
+.card {
+  padding: 20px 70px;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+mat-card-actions {
+  padding-left: 8px;
+}
+
+@media only screen and (max-width: 600px) {
+  .card {
+    padding: 20px;
+  }
+}
