@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { UIService } from 'src/app/shared/_services/ui.service';
 import { TrainingService } from 'src/app/training/_services/training.service';
 import { IAuthData } from '../_models/iauth-data.model';
 
@@ -16,7 +18,8 @@ export class AuthService {
   constructor(
     private router: Router,
     private afAuth: AngularFireAuth,
-    private trainingService: TrainingService) { }
+    private trainingService: TrainingService,
+    private uiService: UIService) { }
 
   initAuthListener(): void {
 
@@ -42,15 +45,17 @@ export class AuthService {
 
   registerUser(authData: IAuthData): void {
 
-    // angularfirestore handles the token for us
+    this.uiService.loadingStateChanged.next(true);
 
+    // angularfirestore handles the token for us
     this.afAuth
       .createUserWithEmailAndPassword(authData.email, authData.password)
       .then(result => {
-        console.log(result);
+        this.uiService.loadingStateChanged.next(false);
       })
       .catch(error => {
-        console.log(error);
+        this.uiService.loadingStateChanged.next(false);
+        this.handleError(error);
       });
 
     // this.user = {
@@ -65,13 +70,16 @@ export class AuthService {
 
   login(authData: IAuthData): void {
 
+    this.uiService.loadingStateChanged.next(true);
+
     this.afAuth
       .signInWithEmailAndPassword(authData.email, authData.password)
       .then(result => {
-        console.log(result);
+        this.uiService.loadingStateChanged.next(false);
       })
       .catch(error => {
-        console.log(error);
+        this.uiService.loadingStateChanged.next(false);
+        this.handleError(error);
       });
 
   }
@@ -93,6 +101,13 @@ export class AuthService {
   isAuth(): boolean {
 
     return this.isAuthenticated;
+
+  }
+
+  private handleError(error: HttpErrorResponse): void {
+
+    const errorMessage = error.message.substring(10, error.message.indexOf(" (auth/"))
+    this.uiService.showSnackBar(errorMessage, null, 3000);
 
   }
 

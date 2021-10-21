@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { UIService } from 'src/app/shared/_services/ui.service';
 import { IExercise } from '../_models/iexercise.model';
 
 @Injectable({
@@ -20,9 +22,13 @@ export class TrainingService {
 
   private fbSubscriptions: Subscription[] = [];
 
-  constructor(private db: AngularFirestore) { }
+  constructor(
+    private db: AngularFirestore,
+    private uiService: UIService) { }
 
   fetchAvailableExercises(): void {
+
+    this.uiService.loadingStateChanged.next(true);
 
     this.fbSubscriptions.push(this.db
       .collection('availableExercises')
@@ -36,10 +42,13 @@ export class TrainingService {
         });
       }))
       .subscribe((exercises: IExercise[]) => {
+        this.uiService.loadingStateChanged.next(false);
         this.availableExercises = exercises;
         this.exercisesChanged.next([...this.availableExercises]);
       }, error => {
-        console.log(error);
+        this.uiService.loadingStateChanged.next(false);
+        this.handleError('Fetching exercises failed, please try again later.');
+        this.exercisesChanged.next(null); // so we can allow the user to fetch the data on a button
       }));
 
   }
@@ -58,7 +67,7 @@ export class TrainingService {
       .subscribe((exercises: IExercise[]) => {
         this.finishedExercisesChanged.next(<IExercise[]>exercises);
       }, error => {
-        console.log(error);
+        this.handleError('Fetching exercises failed, please try again later.');
       }));
 
   }
@@ -113,6 +122,12 @@ export class TrainingService {
   cancelSubsciptions(): void {
 
     this.fbSubscriptions.forEach(sub => sub.unsubscribe());
+
+  }
+
+  private handleError(errorMessage: string): void {
+
+    this.uiService.showSnackBar(errorMessage, null, 3000);
 
   }
 

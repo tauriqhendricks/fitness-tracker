@@ -19,14 +19,14 @@ export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  finishedExercisesSubscription: Subscription;
+  finishedExercisesSubs: Subscription;
 
   constructor(private trainingService: TrainingService) { }
 
   ngOnInit(): void {
     // th:note this updates the table live, if I goto firebase and delete or add it automatically changes
     // th:note try this in other projects to see if the same happens 
-    this.finishedExercisesSubscription = this.trainingService.finishedExercisesChanged
+    this.finishedExercisesSubs = this.trainingService.finishedExercisesChanged
       .subscribe((exercises: IExercise[]) => this.dataSource.data = exercises);
 
     this.trainingService.fetchCompletedOrCancelledExercises();
@@ -49,8 +49,9 @@ export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    
-    this.finishedExercisesSubscription.unsubscribe();
+
+    if (this.finishedExercisesSubs)
+      this.finishedExercisesSubs.unsubscribe();
 
   }
 

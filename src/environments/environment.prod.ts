@@ -1,4 +1,5 @@
 export const environment = {
+  production: true,
   firebase: {
     projectId: 'ng-fitness-tracker-4126a',
     appId: '1:724028243184:web:105772f8af7eeff5b05635',
@@ -8,6 +9,5 @@ export const environment = {
     authDomain: 'ng-fitness-tracker-4126a.firebaseapp.com',
     messagingSenderId: '724028243184',
     measurementId: 'G-V212GFQYX9',
-  },
-  production: true
+  }
 };

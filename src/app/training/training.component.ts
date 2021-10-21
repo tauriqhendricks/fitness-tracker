@@ -10,13 +10,13 @@ import { TrainingService } from './_services/training.service';
 export class TrainingComponent implements OnInit, OnDestroy {
 
   onGoingTraining: boolean = false;
-  exerciseSubscription: Subscription;
+  exerciseSubs: Subscription;
 
   constructor(private trainingService: TrainingService) { }
 
   ngOnInit(): void {
 
-    this.exerciseSubscription = this.trainingService.exerciseChanged.subscribe(
+    this.exerciseSubs = this.trainingService.exerciseChanged.subscribe(
       exercise => {
 
         if (exercise) {
@@ -33,7 +33,8 @@ export class TrainingComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
 
-    this.exerciseSubscription.unsubscribe();
+    if (this.exerciseSubs)
+      this.exerciseSubs.unsubscribe();
 
   }
 
