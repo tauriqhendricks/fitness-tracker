@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './app.reducer';
+
 import { AuthModule } from './auth/auth.module';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -33,7 +36,8 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     AngularFireModule.initializeApp(environment.firebase),
     AuthModule,
     AppRoutingModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    StoreModule.forRoot(reducers)
   ],
   providers: [],
   bootstrap: [AppComponent]

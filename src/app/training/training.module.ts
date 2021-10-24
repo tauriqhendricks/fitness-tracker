@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '../shared/shared.module';
+import { StoreModule } from '@ngrx/store';
+import { trainingReducer } from './_services/training.reducer';
 
 import { TrainingComponent } from './training.component';
 import { CurrentTrainingComponent } from './current-training/current-training.component';
@@ -20,7 +22,8 @@ import { TrainingRoutingModule } from './training-routing.module';
   ],
   imports: [
     SharedModule,
-    TrainingRoutingModule
+    TrainingRoutingModule,
+    StoreModule.forFeature('training', trainingReducer)
   ]
 })
 export class TrainingModule { }

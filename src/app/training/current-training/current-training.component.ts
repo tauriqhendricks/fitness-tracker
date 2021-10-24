@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { select, Store } from '@ngrx/store';
 import { TrainingService } from '../_services/training.service';
+import * as fromTraining from '../_services/training.reducer'
 
 import { StopTrainingComponent } from './stop-training.component';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-current-training',
@@ -16,7 +19,8 @@ export class CurrentTrainingComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private trainingService: TrainingService) { }
+    private trainingService: TrainingService,
+    private store: Store<fromTraining.IState>) { }
 
   ngOnInit(): void {
 
@@ -32,20 +36,25 @@ export class CurrentTrainingComponent implements OnInit {
 
   startOrResumeTimer(): void {
 
-    const step = (this.trainingService.getCurrentExercise().duration / 100) * 1000;
+    this.store.pipe(select(fromTraining.getActiveTraining),
+      take(1)) // only want this to happen once, otherwise evertime the active training is changed we will run this
+      .subscribe(activeExercise => {
 
-    this.timer = window.setInterval(() => {
+        const step = (activeExercise.duration / 100) * 1000;
+        this.timer = window.setInterval(() => {
 
-      this.progress += 1;
+          this.progress += 1;
 
-      if (this.progress >= 100) {
+          if (this.progress >= 100) {
 
-        this.trainingService.completeExercise();
-        clearInterval(this.timer);
+            this.trainingService.completeExercise();
+            clearInterval(this.timer);
 
-      }
+          }
 
-    }, step);
+        }, step);
+
+      });
 
   }
 

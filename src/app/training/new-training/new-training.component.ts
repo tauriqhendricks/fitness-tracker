@@ -1,39 +1,31 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { UIService } from 'src/app/shared/_services/ui.service';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { IExercise } from '../_models/iexercise.model';
 import { TrainingService } from '../_services/training.service';
+import * as fromTraining from '../_services/training.reducer';
+import * as fromRoot from '../../app.reducer';
+
 
 @Component({
   selector: 'app-new-training',
   templateUrl: './new-training.component.html',
   styleUrls: ['./new-training.component.css']
 })
-export class NewTrainingComponent implements OnInit, OnDestroy {
+export class NewTrainingComponent implements OnInit {
 
-  exercises: IExercise[] = [];
-  private exerciseSubs: Subscription;
-
-  isLoading = false;
-  private loadingStateSubs: Subscription;
+  exercises$: Observable<IExercise[]>;
+  isLoading$: Observable<boolean>;
 
   constructor(
     private trainingService: TrainingService,
-    private uiService: UIService) { }
+    private store: Store<fromTraining.IState>) { }
 
   ngOnInit(): void {
 
-    this.loadingStateSubs = this.uiService.loadingStateChanged
-      .subscribe(loadiingState => {
-        this.isLoading = loadiingState;
-      });
-
-    this.exerciseSubs = this.trainingService.exercisesChanged
-      .subscribe(exercises => {
-        this.exercises = exercises;
-      });
-
+    this.isLoading$ = this.store.pipe(select(fromRoot.getIsLoading));
+    this.exercises$ = this.store.pipe(select(fromTraining.getAvailableExercises));
     this.fetchExercises();
 
   }
@@ -53,16 +45,6 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   onFetchExercises(): void {
 
     this.fetchExercises();
-
-  }
-
-  ngOnDestroy(): void {
-
-    if (this.exerciseSubs)
-      this.exerciseSubs.unsubscribe();
-
-    if (this.loadingStateSubs)
-      this.loadingStateSubs.unsubscribe();
 
   }
 
