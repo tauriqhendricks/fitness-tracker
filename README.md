@@ -1,27 +1,47 @@
-# FitnessTracker
+# [My Fitness Tracker](https://ng-fitness-tracker-4126a.web.app/)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.3.
 
-## Development server
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+    </li>
+    <li>
+      <a href="#built-with">Built With</a>
+    </li>
+    <li>
+      <a href="#future-updates">Future Updates</a>
+    </li>
+  </ol>
+</details>
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+<!-- ABOUT THE PROJECT -->
+## About The Project
+The app allows users to select a workout to complete. It tracks the users progress by displaying the following:
+* the date the workout was started
+* which workout was selected
+* the duration
+* the calories burned
+* if the workout was completes or not
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Steps
+* either signup or login (if you have already signed up)
+* you can select a workout to perform
+* click start to start the working out
+* you can stop or finish the workout
+* once you are done with the workout it should be added to the past workouts tab
 
-## Build
+## Built With
+This project is built with the following tools:
+* [Angular Web Framework](https://angular.io/)
+* [Visual Studio Code](https://code.visualstudio.com/)
+* [angular material](https://material.angular.io/)
+* [ngrx store](https://ngrx.io/)
+* [firebase](https://firebase.google.com/)
+* [angularfire](https://github.com/angular/angularfire)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Future Updates
+* allow users to add their own workout
