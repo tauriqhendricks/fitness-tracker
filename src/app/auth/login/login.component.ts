@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable,  } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthService } from '../_services/auth.service';
 import { select, Store } from '@ngrx/store';
 import * as fromRoot from '../../app.reducer';
@@ -38,8 +38,8 @@ export class LoginComponent implements OnInit {
     //   });
 
     this.form = this.fb.group({
-      email: ['teat@teat.com', [Validators.required, Validators.email]],
-      password: ['123456', Validators.required]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
     });
 
   }
